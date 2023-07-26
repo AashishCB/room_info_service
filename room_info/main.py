@@ -48,7 +48,7 @@ def read_room(room_id: int, db: Session = Depends(get_db)):
     return db_room
 
 
-@app.patch("/rooms/{room_id}/", response_model=schemas.Room)
+@app.put("/rooms/{room_id}/", response_model=schemas.Room)
 def update_room_occupancy(room_id: int, occupied_by: str, db: Session = Depends(get_db)):
     db_room = crud.get_room_by_id_or_400(db, room_id=room_id)
     return crud.update_room_occupancy(db=db, db_room=db_room, occupied_by=occupied_by)
