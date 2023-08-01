@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from room_info import models, schemas
 
 
 def get_room_types(db: Session, skip: int = 0, limit: int = 100):
