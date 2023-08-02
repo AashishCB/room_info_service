@@ -1,4 +1,4 @@
-FROM python:3.11.3-alpine3.18
+FROM python:3.11.3-slim-buster
 
 WORKDIR /room_info_service_fix
 
