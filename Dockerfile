@@ -1,4 +1,4 @@
-FROM python:3.11.3
+FROM python:3.11.3-alpine
 
 WORKDIR /room_info_service_fix
 
