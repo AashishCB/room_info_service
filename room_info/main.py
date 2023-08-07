@@ -25,8 +25,8 @@ def create_room_type(room_type: schemas.RoomTypeCreate, db: Session = Depends(ge
 
 
 @app.get("/room_types/", response_model=list[schemas.RoomType])
-def read_room_type(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    room_type = crud.get_room_types(db, skip=skip, limit=limit)
+def read_room_types(limit: int = 100, db: Session = Depends(get_db)):
+    room_type = crud.get_room_types(db, limit=limit)
     return room_type
 
 
@@ -37,8 +37,8 @@ def create_room(room_type_id: int, db: Session = Depends(get_db)):
 
 
 @app.get("/room_types/{room_type_id}/rooms/", response_model=list[schemas.Room])
-def read_rooms(room_type_id: int, occupancy: bool = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    rooms = crud.get_rooms_by_room_type(db, room_type_id=room_type_id, skip=skip, limit=limit, occupancy=occupancy)
+def read_rooms(room_type_id: int, occupancy: bool = None, limit: int = 100, db: Session = Depends(get_db)):
+    rooms = crud.get_rooms_by_room_type(db, room_type_id=room_type_id, limit=limit, occupancy=occupancy)
     return rooms
 
 

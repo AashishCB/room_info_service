@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from room_info import models, schemas
 
 
-def get_room_types(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.RoomType).offset(skip).limit(limit).all()
+def get_room_types(db: Session, limit: int = 100):
+    return db.query(models.RoomType).limit(limit).all()
 
 
 def create_room_type(db: Session, room_type: schemas.RoomTypeCreate):
@@ -55,16 +55,15 @@ def create_room(db: Session, room_type_id: int):
     return db_room
 
 
-def get_rooms_by_room_type(db, room_type_id: int, skip: int = 0, limit: int = 100, occupancy: bool = None):
+def get_rooms_by_room_type(db, room_type_id: int, limit: int = 100, occupancy: bool = None):
     if occupancy is not None:
         return db.query(models.Room). \
             filter(models.Room.room_type_id == room_type_id). \
             filter(models.Room.occupied_by==None if occupancy else models.Room.occupied_by!=None). \
-            offset(skip). \
             limit(limit). \
             all()
 
-    return db.query(models.Room).filter(models.Room.room_type_id == room_type_id).offset(skip).limit(limit).all()
+    return db.query(models.Room).filter(models.Room.room_type_id == room_type_id).limit(limit).all()
 
 
 def get_room_by_id_or_400(db, room_id: int):
