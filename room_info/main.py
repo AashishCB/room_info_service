@@ -90,12 +90,22 @@ def read_room(room_id: int, db: Session = Depends(get_db)):
 
 @app.put("/rooms/{room_id}", response_model=RoomSchema, tags=[Tags.ROOM])
 def update_room_occupancy(room_id: int, occupied_by: str, db: Session = Depends(get_db)):
+    """
+        Check-In/Check-Out customer from room
+
+        - **room_id**: id of the room
+    """
     db_room = crud.get_room_by_id_or_404(db, room_id=room_id)
     return crud.update_room_occupancy(db=db, db_room=db_room, occupied_by=occupied_by)
 
 
 @app.get("/rooms/customers/{customer_id}", response_model=SingleRoomInfoSchema)
 def get_customer_room(customer_id: str, db: Session = Depends(get_db)):
+    """
+        Find room of the customer
+
+        - **customer_id**: id of the customer checked-in
+    """
     db_room = crud.get_room_by_customer_id_or_404(db=db, customer_id=customer_id)
     return db_room
 
