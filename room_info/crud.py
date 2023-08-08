@@ -2,14 +2,15 @@ from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
 
-from room_info import models, schemas
+from room_info import models
+from room_info.schemas.room_type_schemas import RoomTypeBaseSchema
 
 
 def get_room_types(db: Session, limit: int = 100):
     return db.query(models.RoomType).limit(limit).all()
 
 
-def create_room_type(db: Session, room_type: schemas.RoomTypeCreate):
+def create_room_type(db: Session, room_type: RoomTypeBaseSchema):
     db_room_type = models.RoomType(name=room_type.name, description=room_type.description, price=room_type.price)
     db.add(db_room_type)
     db.commit()
@@ -36,10 +37,10 @@ def get_room_type_by_name_or_400(db, name: str):
     return db_room_type
 
 
-def get_room_type_by_id_or_400(db, room_type_id: int):
+def get_room_type_by_id_or_404(db, room_type_id: int):
     db_room_type = get_room_type_by_id(db, room_type_id)
     if not db_room_type:
-        raise HTTPException(status_code=400, detail="Room Type doesn't exist")
+        raise HTTPException(status_code=404, detail=f"Room Type {room_type_id} not found")
     return db_room_type
 
 
@@ -66,10 +67,10 @@ def get_rooms_by_room_type(db, room_type_id: int, limit: int = 100, occupancy: b
     return db.query(models.Room).filter(models.Room.room_type_id == room_type_id).limit(limit).all()
 
 
-def get_room_by_id_or_400(db, room_id: int):
+def get_room_by_id_or_404(db, room_id: int):
     db_room = db.query(models.Room).filter(models.Room.room_id == room_id).first()
     if not db_room:
-        raise HTTPException(status_code=400, detail=F"Room {room_id} doesn't exist")
+        raise HTTPException(status_code=404, detail=F"Room {room_id} not found")
     return db_room
 
 
@@ -90,8 +91,8 @@ def update_room_occupancy(db: Session, db_room, occupied_by: str):
         raise HTTPException(status_code=400, detail=F"Invalid customer {occupied_by} for room {db_room.room_id}")
 
 
-def get_room_by_customer_id_or_400(db: Session, customer_id):
+def get_room_by_customer_id_or_404(db: Session, customer_id):
     db_room = db.query(models.Room).filter(models.Room.occupied_by == customer_id).first()
     if not db_room:
-        raise HTTPException(status_code=400, detail=F"No room for customer {customer_id}")
+        raise HTTPException(status_code=404, detail=F"Customer {customer_id} not found")
     return db_room
