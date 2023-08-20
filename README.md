@@ -12,3 +12,10 @@ This is a Rest service based on fastAPI python. One of the micro-service for the
 
 #### Run the project
 `uvicorn room_info.main:app --reload`
+
+
+
+## Alternatively, use the container
+#### Supported for AMD64 and AARCH64 architectures
+
+`docker pull ghcr.io/aashishcb/room_info_service:master`
